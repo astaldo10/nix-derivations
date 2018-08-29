@@ -6,7 +6,7 @@
 Injecting dependencies: https://nixos.org/nix-dev/2017-July/024058.html
 
 == Examples
-Paraview: https://github.com/NixOS/nixpkgs/blob/c70dee9b860efee9c428d9dff8e57e94c3e44253/pkgs/applications/graphics/paraview/default.nix
-Dropbox: https://github.com/NixOS/nixpkgs/blob/7e32b405cebd09da80ed37a97ed42cdc06bebad9/pkgs/applications/networking/dropbox/default.nix
-MetaOCaml: https://github.com/NixOS/nixpkgs/blob/effbf001b9913f9f12393f290b780296da4c66e0/pkgs/development/compilers/ocaml/ber-metaocaml-104.nix
+. Paraview: https://github.com/NixOS/nixpkgs/blob/c70dee9b860efee9c428d9dff8e57e94c3e44253/pkgs/applications/graphics/paraview/default.nix
+. Dropbox: https://github.com/NixOS/nixpkgs/blob/7e32b405cebd09da80ed37a97ed42cdc06bebad9/pkgs/applications/networking/dropbox/default.nix
+. MetaOCaml: https://github.com/NixOS/nixpkgs/blob/effbf001b9913f9f12393f290b780296da4c66e0/pkgs/development/compilers/ocaml/ber-metaocaml-104.nix
 
