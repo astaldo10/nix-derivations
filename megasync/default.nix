@@ -1,5 +1,5 @@
-#{ stdenv, lib, buildFHSUserEnv, writeScript, makeDesktopItem }:
-with import <nixpkgs> {};
+#{ stdenv, lib, fetchFromGitHub, buildFHSUserEnv, writeScript, makeDesktopItem, qmake }:
+with import <nixpkgs> { };
 
 let platforms = [ "i686-linux" "x86_64-linux" ]; in
 
@@ -7,9 +7,9 @@ assert lib.elem stdenv.system platforms;
 
 # MEGASync client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
-let
-  installer = "https://github.com/meganz/MEGAsync/archive/${version}_Linux.tar.gz";
-in
+# let
+#   installer = "https://github.com/meganz/MEGAsync/archive/${version}_Linux.tar.gz";
+# in
 
 let
   desktopItem = makeDesktopItem {
@@ -24,43 +24,33 @@ let
 in
 
 stdenv.mkDerivation rec {
-
   name = "megasync-${version}";
   version = "3.6.6.0";
 
-  # Fetching from GitHub instead of taking an "official" source
-  # tarball because of missing submodules there
+  # Get sha256 using $> nix-prefetch-url --unpack https://github.com/meganz/megasync/archive/v3.6.6.0_Linux.tar.gz
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1jivph7lppnflmjsiirhgv0mnh8mxx41i1vzkk78ynn00rzacx3j";
+    sha256 = "12lg3h62wdfms15shc9djjzx27svnqr9aib9ssdggwp00rydmaqs";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-  #  cmake
-  #  makeWrapper
-  ];
-
-  buildInputs = [
-  #  python
-  #  python.pkgs.numpy
-  #  libGLU_combined
-  #  libXt
-  #  qtbase
-  #  qtx11extras
-  #  qttools
-  #  qtxmlpatterns
-  ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ libtool unzip autoconf wget automake qt4 pkgconfig ];
 
   extraInstallCommands = ''
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
-  
+
+  preConfigure = ''
+    patchShebangs ./src/configure
+    patchShebangs ./src/MEGASync/mega/contrib/build_sdk.sh
+  '';
+
   buildPhase = ''
-    cd src
+    cd ./src
     ./configure
     qmake MEGA.pro
     lrelease MEGASync/MEGASync.pro
